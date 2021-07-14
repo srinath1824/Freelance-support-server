@@ -3,12 +3,18 @@ const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 require("dotenv").config();
-const { getDeveloperDetails, createDeveloperDetails, updateDeveloperDetails, deleteDeveloperDetails } = require("../mongoDB");
+const { getDeveloperDetails, getDeveloperDetailsById, createDeveloperDetails, updateDeveloperDetails, deleteDeveloperDetails } = require("../mongoDB");
 
 // Using callback
 
 router.get("/getDeveloperDetails", async (req, res) => {
     const data = await getDeveloperDetails();
+    res.status(200).send(data);
+});
+
+router.get("/getDeveloperDetailsById/:id", async (req, res) => {
+    const { id } = req.params;
+    const data = await getDeveloperDetailsById(id);
     res.status(200).send(data);
 });
 

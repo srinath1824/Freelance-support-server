@@ -19,6 +19,7 @@ const clientDetailsSchema = new mongoose.Schema({
   started: String,
   amount: Number,
   status: String,
+  developerId: String
 });
 
 const developerDetailsSchema = new mongoose.Schema({
@@ -50,7 +51,6 @@ const getClientDetails = async () => {
   } catch (err) {
     console.log("ERROR IN FINDING DATA");
   }
-  console.log(details);
   return details;
 }
 
@@ -62,7 +62,6 @@ const updateClientDetails = async (data, id) => {
   );
   if (!clientData) return;
   const result = await clientData.save();
-  console.log(result);
   return result;
 };
 
@@ -72,6 +71,13 @@ const deleteClientDetails = async (id) => {
   if (!clientData) return;
   return clientData;
 };
+
+const clientDeveloperMapping = async (data) => {
+  let clientDetails = mongoose.model("client_details", clientDetailsSchema);
+  const clientData = await clientDetails.findOneAndUpdate({ _id: data.clientId }, { developerId: data.developerId } );
+  if (!clientData) return;
+  return clientDetails.find({ _id: data.clientId });
+}
 
 // ----------------------------------------------------------------
 
@@ -93,7 +99,17 @@ const getDeveloperDetails = async () => {
   } catch (err) {
     console.log("ERROR IN FINDING DATA");
   }
-  console.log(details);
+  return details;
+}
+
+const getDeveloperDetailsById = async (id) => {
+  const developerDetails = mongoose.model("developer_details", developerDetailsSchema);
+  let details;
+  try {
+    details = await developerDetails.find({ _id: id });
+  } catch (err) {
+    console.log("ERROR IN FINDING DATA");
+  }
   return details;
 }
 
@@ -105,7 +121,6 @@ const updateDeveloperDetails = async (data, id) => {
   );
   if (!developerData) return;
   const result = await developerData.save();
-  console.log(result);
   return result;
 };
 
@@ -132,9 +147,11 @@ module.exports = {
   createClientDetails,
   updateClientDetails,
   deleteClientDetails,
+  clientDeveloperMapping,
 
   createDeveloperDetails,
   getDeveloperDetails,
+  getDeveloperDetailsById,
   updateDeveloperDetails,
   deleteDeveloperDetails
 };
