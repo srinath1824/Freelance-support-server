@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 require("dotenv").config();
-const { getDeveloperDetails, getDeveloperDetailsById, createDeveloperDetails, updateDeveloperDetails, deleteDeveloperDetails } = require("../mongoDB");
+const { getDeveloperDetails, getDeveloperDetailsById, createDeveloperDetails, updateDeveloperDetails, deleteDeveloperDetails, developerPaymentDetails } = require("../mongoDB");
 
 // Using callback
 
@@ -33,6 +33,12 @@ router.delete("/deleteDeveloperDetails/:id", async (req, res) => {
     const { id } = req.params;
     const response = await deleteDeveloperDetails(id);
     res.status(200).send(response);
+});
+
+router.put("/developerPaymentDetails/:id", async (req, res) => {
+    const { id } = req.params;
+    const data = await developerPaymentDetails(req.body, id);
+    res.status(200).send(data);
 });
 
 module.exports = router;

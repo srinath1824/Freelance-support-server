@@ -19,7 +19,8 @@ const clientDetailsSchema = new mongoose.Schema({
   started: String,
   amount: Number,
   status: String,
-  developerId: String
+  developerId: String,
+  paymentDetails: Array
 });
 
 const developerDetailsSchema = new mongoose.Schema({
@@ -31,6 +32,7 @@ const developerDetailsSchema = new mongoose.Schema({
   company: String,
   mobile: Number,
   status: String,
+  paymentDetails: Array
 });
 
 // *************** Client Details ********************************
@@ -77,6 +79,20 @@ const clientDeveloperMapping = async (data) => {
   const clientData = await clientDetails.findOneAndUpdate({ _id: data.clientId }, { developerId: data.developerId } );
   if (!clientData) return;
   return clientDetails.find({ _id: data.clientId });
+}
+
+const clientDeveloperUnmapping = async (data) => {
+  let clientDetails = mongoose.model("client_details", clientDetailsSchema);
+  const clientData = await clientDetails.findOneAndUpdate({ _id: data.clientId }, { developerId: "" } );
+  if (!clientData) return;
+  return clientDetails.find({ _id: data.clientId });
+}
+
+const clientPaymentDetails = async (data, id) => {
+  let paymentDetails = mongoose.model("client_details", clientDetailsSchema);
+  const clientData = await paymentDetails.findOneAndUpdate({ _id: id }, { $push: { paymentDetails: [data] } } );
+  if (!clientData) return;
+  return paymentDetails.find({ _id: id });
 }
 
 // ----------------------------------------------------------------
@@ -131,6 +147,13 @@ const deleteDeveloperDetails = async (id) => {
   return developerData;
 };
 
+const developerPaymentDetails = async (data, id) => {
+  let paymentDetails = mongoose.model("developer_details", developerDetailsSchema);
+  const developerData = await paymentDetails.findOneAndUpdate({ _id: id }, { $push: { paymentDetails: [data] } } );
+  if (!developerData) return;
+  return paymentDetails.find({ _id: id });
+}
+
 
 // ----------------------------------------------------------------
 
@@ -148,10 +171,13 @@ module.exports = {
   updateClientDetails,
   deleteClientDetails,
   clientDeveloperMapping,
+  clientDeveloperUnmapping,
+  clientPaymentDetails,
 
   createDeveloperDetails,
   getDeveloperDetails,
   getDeveloperDetailsById,
   updateDeveloperDetails,
-  deleteDeveloperDetails
+  deleteDeveloperDetails,
+  developerPaymentDetails
 };
