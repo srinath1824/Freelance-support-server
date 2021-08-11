@@ -195,53 +195,37 @@ const getDashBoradDetails = async () => {
   let devamountdetails = [];
 
   const dateView = (date) => {
-    let d = new Date(date);
-    let month = new Array(12);
-    month[0] = "Jan";
-    month[1] = "Feb";
-    month[2] = "Mar";
-    month[3] = "Apr";
-    month[4] = "May";
-    month[5] = "June";
-    month[6] = "July";
-    month[7] = "Aug";
-    month[8] = "Sept";
-    month[9] = "Oct";
-    month[10] = "Nov";
-    month[11] = "Dec";
-
-    let n = month[d.getUTCMonth()];
-    let year = d.getFullYear();
-    return n + year;
+    let paidDate = new Date(date);
+    let monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    let month = monthNames[paidDate.getUTCMonth()];
+    let year = paidDate.getFullYear();
+    return month + year;
   };
-  const checkValues = (date, amount) => {
-    let checkval = profitdetails.find((val) => val.name === date);
+  const checkValues = (date, amount, detailValues) => {
+    let checkval = detailValues.find((val) => val.name === date);
     if (checkval) {
-      let index = profitdetails.findIndex((val) => val.name === date);
-      let details = [...profitdetails];
+      let index = detailValues.findIndex((val) => val.name === date);
+      let details = [...detailValues];
       details[index].earning =
         parseInt(details[index].earning) + parseInt(amount);
       details.splice(index, 1, details[index]);
     } else {
-      profitdetails.push({
+      detailValues.push({
         name: date,
         earning: amount,
-      });
-    }
-  };
-
-  const devValues = (date, amount) => {
-    let checkval = devamountdetails.find((val) => val.name === date);
-    if (checkval) {
-      let index = devamountdetails.findIndex((val) => val.name === date);
-      let details = [...devamountdetails];
-      details[index].earnedamount =
-        parseInt(details[index].earnedamount) + parseInt(amount);
-      details.splice(index, 1, details[index]);
-    } else {
-      devamountdetails.push({
-        name: date,
-        earnedamount: amount,
       });
     }
   };
@@ -250,13 +234,13 @@ const getDashBoradDetails = async () => {
     clientPaydetails.map((data) => {
       data.paymentDetails.map((val) => {
         const paidMonth = dateView(val.datePaid);
-        checkValues(paidMonth, val.amountPaid);
+        checkValues(paidMonth, val.amountPaid, profitdetails);
       });
     });
     devdetails.map((data) => {
       data.paymentDetails.map((val) => {
         const paidMonth = dateView(val.datePaid);
-        devValues(paidMonth, val.amountPaid);
+        checkValues(paidMonth, val.amountPaid, devamountdetails);
       });
     });
     profitdetails.map((client) => {
