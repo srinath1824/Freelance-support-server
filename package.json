@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "nodemon index.js"
   },
   "engines": {
     "node": "10.19.0"
@@ -25,6 +25,8 @@
     "lodash": "^4.17.15",
     "mongoose": "^5.9.7",
     "morgan": "^1.10.0",
-    "node-geocoder": "^3.27.0"
+    "node-geocoder": "^3.27.0",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.1.6"
   }
 }
