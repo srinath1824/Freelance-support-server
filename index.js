@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const auth = require("./auth");
 const clientDetails = require("./routes/clientDetails");
 const developerDetails = require("./routes/developerDetails");
+const paymentDetails = require("./routes/paymentDetails");
 const authMiddleware = require("./middleware/auth");
 const cors = require("cors");
 const fs = require("fs");
@@ -53,6 +54,7 @@ app.use(function (req, res, next) {
 app.use("/api/auth", auth);
 app.use("/api/fs/client", clientDetails);
 app.use("/api/fs/developer", developerDetails);
+app.use("/api/fs/paymentdetails", paymentDetails);
 
 app.listen(port, () => {
   console.log(`listining to port ${port}`);
