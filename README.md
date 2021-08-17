@@ -1,7 +1,7 @@
-# Twitter-server
+# Freelance-support-server
 
 Run command:
-node index.js
+npm start
 
 ## steps to deploy to heroku
 
@@ -38,4 +38,4 @@ to see all env variables
 
 ## server URL
 
-https://lit-journey-60346.herokuapp.com/api
+https://freelance-support-server.herokuapp.com/
