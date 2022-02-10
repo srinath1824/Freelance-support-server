@@ -32,7 +32,8 @@ const developerDetailsSchema = new mongoose.Schema({
   company: String,
   mobile: Number,
   status: String,
-  paymentDetails: Array
+  paymentDetails: Array,
+  clientId: String,
 });
 
 // *************** Client Details ********************************
@@ -73,10 +74,18 @@ const deleteClientDetails = async (id) => {
 
 const clientDeveloperMapping = async (data) => {
   let clientDetails = mongoose.model("client_details", clientDetailsSchema);
+  let developerDetails = mongoose.model(
+    "developer_details",
+    developerDetailsSchema
+  );
   const clientData = await clientDetails.findOneAndUpdate(
     { _id: data.clientId },
     { developerId: data.developerId }
   );
+  const devData = await developerDetails.findOneAndUpdate(
+    {_id: data.developerId},
+    {clientId: data.clientId}
+  )
   if (!clientData) return;
   return clientDetails.find({ _id: data.clientId });
 };
