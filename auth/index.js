@@ -4,10 +4,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 router.post("/login", (req, res) => {
-  if (
-    req.body.username === "test" &&
-    req.body.password === "test"
-  ) {
+  if (req.body.userName === "test" && req.body.password === "test") {
     const token = jwt.sign(
       { message: "authenticated" },
       process.env.JWTPRIVATEKEY
@@ -19,7 +16,7 @@ router.post("/login", (req, res) => {
     });
   } else {
     res.status(400).send({
-      message: "Incorrect username or password",
+      message: "Incorrect userName or password",
     });
   }
 });
